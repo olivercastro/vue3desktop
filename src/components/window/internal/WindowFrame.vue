@@ -8,7 +8,7 @@
         movementY: 0
     });
 
-    const draggableContainer = ref(null);
+    const windowContainer = ref(null);
 
     const dragMouseDown = (event) => {
         event.preventDefault();
@@ -24,8 +24,8 @@
         positions.value.movementY = positions.value.clientY - event.clientY;
         positions.value.clientX = event.clientX;
         positions.value.clientY = event.clientY;
-        draggableContainer.value.style.top = (draggableContainer.value.offsetTop - positions.value.movementY) + 'px';
-        draggableContainer.value.style.left = (draggableContainer.value.offsetLeft - positions.value.movementX) + 'px';
+        windowContainer.value.style.top = (windowContainer.value.offsetTop - positions.value.movementY) + 'px';
+        windowContainer.value.style.left = (windowContainer.value.offsetLeft - positions.value.movementX) + 'px';
     }
 
     const closeDragElement = () => {
@@ -35,13 +35,23 @@
 </script>
 
 <template>
-    <div ref="draggableContainer" id="draggable-container">
-    <div id="draggable-header" @mousedown="dragMouseDown">
-        <slot name="header"></slot>
-    </div>
-        <slot name="main"></slot>
+    <div ref="windowContainer" class="absolute z-10 bg-white rounded-t-lg border-1 border-black border-opacity-100 shadow" id="window-frame-x" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div id="draggable-header" class="bg-gray-500 rounded-t-lg" @mousedown="dragMouseDown">
+            <div class="px-5 pt-1 pb-1 flex">
+                <div class="window-title flex-grow">
+                    <slot name="title"></slot>
+                </div>
+                <div class="window-actions flex-none w-16">
+                </div>
+            </div>
+        </div>
+        <div class="window-content px-5 pb-10 pt-10">
+            <slot name="main"></slot>
+        </div>
+        
         <slot name="footer"></slot>
     </div>
+    
 </template>
 
 <style>
